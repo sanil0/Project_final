@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project WARP - Traffic Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🛡️</span>
+                <h1 class="text-2xl font-bold text-gray-900">Project WARP Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600">{{ request.session.get('user', 'User') }}</span>
+                <a href="/dashboard/logout" class="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex space-x-8">
+                <a href="/dashboard" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Overview
+                </a>
+                <a href="/dashboard/traffic" class="px-3 py-4 border-b-2 border-blue-600 text-blue-600 font-medium">
+                    Traffic
+                </a>
+                <a href="/dashboard/security" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Security
+                </a>
+                <a href="/dashboard/settings" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Traffic Analysis</h2>
+
+        <!-- Time Range Filter -->
+        <div class="bg-white rounded-lg shadow p-4 mb-6">
+            <div class="flex space-x-4">
+                <button onclick="updateTimeRange(60)" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    1 Hour
+                </button>
+                <button onclick="updateTimeRange(360)" class="px-4 py-2 bg-gray-200 text-gray-900 rounded hover:bg-gray-300">
+                    6 Hours
+                </button>
+                <button onclick="updateTimeRange(1440)" class="px-4 py-2 bg-gray-200 text-gray-900 rounded hover:bg-gray-300">
+                    24 Hours
+                </button>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Request Rate -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Request Rate (RPS)</h3>
+                <canvas id="requestRateChart" height="100"></canvas>
+            </div>
+
+            <!-- Blocked vs Allowed -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Allowed vs Blocked</h3>
+                <canvas id="allowedBlockedChart" height="100"></canvas>
+            </div>
+
+            <!-- Latency -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Response Latency (P95)</h3>
+                <canvas id="latencyChart" height="100"></canvas>
+            </div>
+
+            <!-- Risk Score Distribution -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Risk Score Distribution</h3>
+                <canvas id="riskScoreChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <!-- Traffic Statistics Table -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Traffic Statistics</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Metric</th>
+                            <th class="px-4 py-2 text-right">Value</th>
+                            <th class="px-4 py-2 text-right">Change</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-table">
+                        <tr>
+                            <td colspan="3" class="px-4 py-2 text-gray-500">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentTimeRange = 60;
+
+        function updateTimeRange(minutes) {
+            currentTimeRange = minutes;
+            loadTrafficData();
+        }
+
+        async function loadTrafficData() {
+            try {
+                const response = await axios.get(`/dashboard/api/traffic?range_minutes=${currentTimeRange}`);
+                renderTrafficCharts(response.data);
+            } catch (error) {
+                console.error('Error loading traffic data:', error);
+            }
+        }
+
+        function renderTrafficCharts(data) {
+            // Placeholder implementation
+            console.log('Traffic data:', data);
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadTrafficData);
+
+        // Refresh every 30 seconds
+        setInterval(loadTrafficData, 30000);
+    </script>
+
+    <!-- Dashboard Client -->
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

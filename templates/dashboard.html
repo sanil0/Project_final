@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project WARP - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🛡️</span>
+                <h1 class="text-2xl font-bold text-gray-900">Project WARP Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600">{{ request.session.get('user', 'User') }}</span>
+                <a href="/dashboard/logout" class="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex space-x-8">
+                <a href="/dashboard" class="px-3 py-4 border-b-2 border-blue-600 text-blue-600 font-medium">
+                    Overview
+                </a>
+                <a href="/dashboard/traffic" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Traffic
+                </a>
+                <a href="/dashboard/security" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Security
+                </a>
+                <a href="/dashboard/settings" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Total Requests -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Total Requests</p>
+                        <p class="text-3xl font-bold text-gray-900" id="metric-total-requests">0</p>
+                    </div>
+                    <div class="text-4xl text-blue-600">📊</div>
+                </div>
+            </div>
+
+            <!-- Blocked Requests -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Blocked Requests</p>
+                        <p class="text-3xl font-bold text-red-600" id="metric-blocked-requests">0</p>
+                    </div>
+                    <div class="text-4xl text-red-600">🚫</div>
+                </div>
+            </div>
+
+            <!-- Block Rate -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Block Rate</p>
+                        <p class="text-3xl font-bold text-orange-600" id="metric-block-rate">0%</p>
+                    </div>
+                    <div class="text-4xl text-orange-600">⚡</div>
+                </div>
+            </div>
+
+            <!-- Active Blocked IPs -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Blocked IPs</p>
+                        <p class="text-3xl font-bold text-purple-600" id="metric-blocked-ips">0</p>
+                    </div>
+                    <div class="text-4xl text-purple-600">🔒</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Traffic Chart -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Traffic (1 Hour)</h2>
+                <canvas id="trafficChart" height="80"></canvas>
+            </div>
+
+            <!-- Block Rate Chart -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Block Rate Distribution</h2>
+                <canvas id="blockRateChart" height="80"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Events -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Detection Events</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Timestamp</th>
+                            <th class="px-4 py-2 text-left">Source IP</th>
+                            <th class="px-4 py-2 text-left">Risk Score</th>
+                            <th class="px-4 py-2 text-left">Detection Type</th>
+                            <th class="px-4 py-2 text-left">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="events-table">
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-gray-500">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Blocked IPs -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Currently Blocked IPs</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-4 py-2 text-left">IP Address</th>
+                            <th class="px-4 py-2 text-left">Reason</th>
+                            <th class="px-4 py-2 text-left">Blocked At</th>
+                            <th class="px-4 py-2 text-left">Duration (min)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blocked-ips-table">
+                        <tr>
+                            <td colspan="4" class="px-4 py-2 text-gray-500">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

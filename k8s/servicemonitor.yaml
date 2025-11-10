@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ddos-protection
+  namespace: ddos-protection
+  labels:
+    app: ddos-protection
+    release: prometheus  # Matches Prometheus Operator release label
+spec:
+  selector:
+    matchLabels:
+      app: ddos-protection
+  namespaceSelector:
+    matchNames:
+      - ddos-protection
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s
+    scrapeTimeout: 14s
+    metricRelabelings:
+    - sourceLabels: [__name__]
+      regex: 'go_.*|process_.*'
+      action: drop
+  - port: http
+    path: /metrics/custom
+    interval: 30s
+    scrapeTimeout: 29s
+    honorLabels: true

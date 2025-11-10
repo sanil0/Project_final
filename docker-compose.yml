@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  ddos-protection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ddos-protection:latest
+    container_name: ddos-protection
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=INFO
+      - UPSTREAM_BASE_URL=${UPSTREAM_BASE_URL:-http://target-app:8080}
+      - TARGET_URL=${TARGET_URL:-http://target-app:8080}
+      - SENSITIVITY_LEVEL=${SENSITIVITY_LEVEL:-medium}
+      - BASE_RATE_LIMIT=${BASE_RATE_LIMIT:-120}
+      - ENABLE_MODEL_CACHE=${ENABLE_MODEL_CACHE:-true}
+    volumes:
+      - ./logs:/app/logs
+      - ./models:/app/models
+      - ./config:/app/config
+    ports:
+      - "8000:8000"  # API
+      - "9090:9090"  # Metrics
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+        reservations:
+          cpus: '2'
+          memory: 2G
+    networks:
+      - ddos-net
+
+  # Target application for testing
+  target-app:
+    image: nginx:alpine
+    container_name: target-app
+    restart: unless-stopped
+    volumes:
+      - ./tests/target-app:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+    networks:
+      - ddos-net
+
+  # Prometheus for metrics
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9091:9090"
+    networks:
+      - ddos-net
+
+  # Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./monitoring/grafana:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - ddos-net
+
+networks:
+  ddos-net:
+    driver: bridge
+
+volumes:
+  prometheus_data:
+  grafana_data:

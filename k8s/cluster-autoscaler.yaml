@@ -1,0 +1,25 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: ClusterAutoscaler
+metadata:
+  name: ddos-protection
+  namespace: kube-system
+spec:
+  scaleDown:
+    enabled: true
+    delayAfterAdd: 10m
+    delayAfterDelete: 10m
+    delayAfterFailure: 3m
+    unneededTime: 10m
+  scaleDownUnneededTime: 10m
+  scaleDownUnreadyTime: 20m
+  scaleDownUtilizationThreshold: 0.5
+  maxNodeProvisionTime: 15m
+  balanceSimilarNodeGroups: true
+  expander: least-waste
+  skipNodesWithLocalStorage: true
+  skipNodesWithSystemPods: true
+  nodeGroups:
+  - name: default-worker
+    minSize: 3
+    maxSize: 10
+    machineType: "t3.large"

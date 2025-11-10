@@ -1,0 +1,65 @@
+[
+  {
+    "test": "Proxy Health",
+    "status": "FAIL",
+    "message": "Could not connect to proxy: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534300.619346
+  },
+  {
+    "test": "HTTP Forwarding",
+    "status": "FAIL",
+    "message": "Forwarding error: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534302.7666698
+  },
+  {
+    "test": "Dashboard Access",
+    "status": "FAIL",
+    "message": "Could not access dashboard: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534304.904192
+  },
+  {
+    "test": "API Endpoints",
+    "status": "FAIL",
+    "message": "API error: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534307.054189
+  },
+  {
+    "test": "Rate Limiting Headers",
+    "status": "WARN",
+    "message": "Could not check headers: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534309.190081
+  },
+  {
+    "test": "POST Forwarding",
+    "status": "FAIL",
+    "message": "POST error: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534311.301114
+  },
+  {
+    "test": "Concurrent Requests",
+    "status": "FAIL",
+    "message": "Concurrent error: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534313.451523
+  },
+  {
+    "test": "Detection Services",
+    "status": "WARN",
+    "message": "Could not check detection services: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534315.5808933
+  },
+  {
+    "test": "Error Handling",
+    "status": "FAIL",
+    "message": "Error handling failed: [WinError 10061] No connection could be made because the target machine actively refused it",
+    "details": {},
+    "timestamp": 1762534317.714013
+  }
+]

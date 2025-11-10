@@ -1,0 +1,93 @@
+{
+  "tests": [
+    {
+      "test": "Health Endpoint",
+      "status": "PASS",
+      "message": "Health check successful",
+      "details": {
+        "status": "healthy"
+      }
+    },
+    {
+      "test": "GET Forwarding",
+      "status": "PASS",
+      "message": "GET request successfully forwarded",
+      "details": {
+        "args": {
+          "test_key": "test_value"
+        }
+      }
+    },
+    {
+      "test": "POST Forwarding",
+      "status": "PASS",
+      "message": "POST request with JSON body successfully forwarded",
+      "details": {
+        "sent_data": {
+          "test": "data",
+          "timestamp": 1762621851
+        }
+      }
+    },
+    {
+      "test": "Query Parameters",
+      "status": "PASS",
+      "message": "Query parameters correctly forwarded",
+      "details": {
+        "params": {
+          "param1": "value1",
+          "param2": "value2"
+        }
+      }
+    },
+    {
+      "test": "Custom Headers",
+      "status": "PASS",
+      "message": "Custom headers correctly forwarded (2/2)",
+      "details": {
+        "headers_forwarded": 2,
+        "total_headers": 7
+      }
+    },
+    {
+      "test": "Response Time",
+      "status": "PASS",
+      "message": "Response received in 0.999 seconds",
+      "details": {
+        "response_time_ms": 998.7936019897461
+      }
+    },
+    {
+      "test": "Metrics Endpoint",
+      "status": "PASS",
+      "message": "Metrics endpoint working (47 lines)",
+      "details": {
+        "metric_count": 47
+      }
+    },
+    {
+      "test": "Concurrent Requests",
+      "status": "PASS",
+      "message": "All 5 concurrent requests successful",
+      "details": {
+        "successful": 5,
+        "total": 5
+      }
+    },
+    {
+      "test": "HTTP Methods",
+      "status": "PASS",
+      "message": "HTTP methods working (4/4)",
+      "details": {
+        "methods_ok": 4,
+        "methods_tested": 4
+      }
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "pass_rate": 100.0
+  }
+}

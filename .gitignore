@@ -1,0 +1,88 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Build Artifacts
+*.pyc
+*.pyo
+*.log
+
+# Temporary Files
+temp/
+tmp/
+*.tmp
+test_output.txt
+
+# Node modules (if any frontend)
+node_modules/
+npm-debug.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Optional: Exclude large datasets (uncomment if not using for training)
+# Datasets/
+
+# Logs
+logs/
+*.log
+
+# Models (keep these, they're needed)
+# models/
+
+# Documentation temp files
+*.md.bak
+*.md.tmp
+
+# Docker
+.docker/
+
+# Kubernetes
+.kube/
+
+# AWS
+.aws/
+aws_credentials
+
+# Certificates (if not in version control)
+# certs/
+
+# Large backups
+*.backup
+*.tar.gz
+*.zip

@@ -1,0 +1,503 @@
+{
+  "phase": "phase2_attack_simulation",
+  "timestamp": "2025-11-08T22:15:34.737835",
+  "baseline": [
+    {
+      "request_id": 0,
+      "status_code": 200,
+      "response_time": 1.613790512084961,
+      "timestamp": "2025-11-08T22:15:06.631698",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 1,
+      "status_code": 200,
+      "response_time": 0.9233896732330322,
+      "timestamp": "2025-11-08T22:15:08.061118",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 2,
+      "status_code": 200,
+      "response_time": 0.4166257381439209,
+      "timestamp": "2025-11-08T22:15:08.982064",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 3,
+      "status_code": 200,
+      "response_time": 0.8177227973937988,
+      "timestamp": "2025-11-08T22:15:10.305411",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 4,
+      "status_code": 200,
+      "response_time": 0.3357834815979004,
+      "timestamp": "2025-11-08T22:15:11.145583",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 5,
+      "status_code": 200,
+      "response_time": 0.28380489349365234,
+      "timestamp": "2025-11-08T22:15:11.932285",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 6,
+      "status_code": 200,
+      "response_time": 0.3366432189941406,
+      "timestamp": "2025-11-08T22:15:12.770431",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 7,
+      "status_code": 200,
+      "response_time": 0.5275137424468994,
+      "timestamp": "2025-11-08T22:15:13.800301",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 8,
+      "status_code": 200,
+      "response_time": 3.227041006088257,
+      "timestamp": "2025-11-08T22:15:17.531084",
+      "phase": "baseline",
+      "allowed": true
+    },
+    {
+      "request_id": 9,
+      "status_code": 200,
+      "response_time": 0.5665600299835205,
+      "timestamp": "2025-11-08T22:15:18.604059",
+      "phase": "baseline",
+      "allowed": true
+    }
+  ],
+  "attack": [
+    {
+      "request_id": 0,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 1,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 2,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 3,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 4,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 5,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 6,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 7,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 8,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 9,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 10,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 11,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 12,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 13,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 14,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 15,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 16,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 17,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 18,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 19,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 20,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 21,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 22,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 23,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 24,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 25,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 26,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 27,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 28,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.715407",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 29,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 30,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 31,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 32,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 33,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 34,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 35,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 36,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 37,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 38,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 39,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 40,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 41,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 42,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 43,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 44,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.715407",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 45,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 46,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 47,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 48,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.715407",
+      "phase": "attack",
+      "error": ""
+    },
+    {
+      "request_id": 49,
+      "status_code": 0,
+      "response_time": 0,
+      "timestamp": "2025-11-08T22:15:32.705246",
+      "phase": "attack",
+      "error": ""
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "total": 10,
+      "allowed": 10,
+      "blocked": 0,
+      "avg_response_time": 0.9048875093460083
+    },
+    "attack": {
+      "total": 50,
+      "allowed": 0,
+      "rate_limited": 0,
+      "blocked": 0,
+      "avg_response_time": 0.0
+    }
+  }
+}

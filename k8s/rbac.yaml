@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ddos-protection-sa
+  namespace: ddos-protection
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ddos-protection-role
+  namespace: ddos-protection
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ddos-protection-rolebinding
+  namespace: ddos-protection
+subjects:
+- kind: ServiceAccount
+  name: ddos-protection-sa
+  namespace: ddos-protection
+roleRef:
+  kind: Role
+  name: ddos-protection-role
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,83 @@
+groups:
+- name: ddos_alerts
+  rules:
+  - alert: HighDDoSBlockRate
+    expr: rate(ddos_events_total{result="blocked"}[5m]) > 100
+    for: 1m
+    labels:
+      severity: critical
+      alert_type: ddos
+    annotations:
+      summary: High rate of DDoS blocks
+      description: "{{ $value }} requests/sec being blocked in the last 5 minutes"
+
+  - alert: ElevatedResponseTime
+    expr: histogram_quantile(0.95, rate(ddos_response_time_seconds_bucket[5m])) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+      alert_type: performance
+    annotations:
+      summary: Elevated response times
+      description: "95th percentile response time is {{ $value }}s"
+
+  - alert: HighMLPredictionLatency
+    expr: histogram_quantile(0.95, rate(ddos_ml_prediction_duration_seconds_bucket[5m])) > 0.05
+    for: 5m
+    labels:
+      severity: warning
+      alert_type: performance
+    annotations:
+      summary: High ML prediction latency
+      description: "95th percentile ML prediction time is {{ $value }}s"
+
+  - alert: HighFalsePositiveRate
+    expr: |
+      sum(rate(ddos_ml_predictions_total{result="benign"}[1h])) by (confidence_level)
+      / 
+      sum(rate(ddos_ml_predictions_total[1h])) by (confidence_level)
+      > 0.01
+    for: 1h
+    labels:
+      severity: warning
+      alert_type: accuracy
+    annotations:
+      summary: High false positive rate detected
+      description: "False positive rate is {{ $value }} for confidence level {{ $labels.confidence_level }}"
+
+  - alert: ActiveBlocksIncreasing
+    expr: deriv(ddos_active_blocks{severity="high"}[10m]) > 0
+    for: 15m
+    labels:
+      severity: warning
+      alert_type: trend
+    annotations:
+      summary: Active blocks increasing steadily
+      description: "High severity blocks increasing over the last 15 minutes"
+
+  - alert: CriticalResourceExhaustion
+    expr: |
+      sum by (severity) (ddos_active_blocks) > 10000
+      and
+      rate(ddos_events_total{result="blocked"}[5m]) > 500
+    for: 1m
+    labels:
+      severity: critical
+      alert_type: resources
+    annotations:
+      summary: Critical resource exhaustion
+      description: "High number of active blocks and blocking rate"
+
+  - alert: AnomalousTrafficPattern
+    expr: |
+      abs(
+        rate(ddos_events_total[5m])
+        - avg_over_time(rate(ddos_events_total[1h])[30m:5m])
+      ) > 100
+    for: 5m
+    labels:
+      severity: warning
+      alert_type: anomaly
+    annotations:
+      summary: Anomalous traffic pattern detected
+      description: "Current traffic pattern deviates significantly from baseline"

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project WARP - Security Monitoring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🛡️</span>
+                <h1 class="text-2xl font-bold text-gray-900">Project WARP Dashboard</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600">{{ request.session.get('user', 'User') }}</span>
+                <a href="/dashboard/logout" class="text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex space-x-8">
+                <a href="/dashboard" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Overview
+                </a>
+                <a href="/dashboard/traffic" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Traffic
+                </a>
+                <a href="/dashboard/security" class="px-3 py-4 border-b-2 border-blue-600 text-blue-600 font-medium">
+                    Security
+                </a>
+                <a href="/dashboard/settings" class="px-3 py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    Settings
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Security Monitoring</h2>
+
+        <!-- Key Security Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Active Threats</p>
+                <p class="text-3xl font-bold text-red-600" id="active-threats">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Malicious IPs</p>
+                <p class="text-3xl font-bold text-orange-600" id="malicious-ips">0</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm">Detection Accuracy</p>
+                <p class="text-3xl font-bold text-green-600" id="detection-accuracy">95%</p>
+            </div>
+        </div>
+
+        <!-- Attack Type Distribution -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Attack Type Distribution</h3>
+            <canvas id="attackTypeChart" height="80"></canvas>
+        </div>
+
+        <!-- Top Malicious IPs -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Malicious IPs</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-4 py-2 text-left">IP Address</th>
+                            <th class="px-4 py-2 text-left">Attack Type</th>
+                            <th class="px-4 py-2 text-right">Count</th>
+                            <th class="px-4 py-2 text-right">Risk Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="malicious-ips-table">
+                        <tr>
+                            <td colspan="4" class="px-4 py-2 text-gray-500">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Security Events -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Security Events</h3>
+            <div class="space-y-3" id="security-events">
+                <p class="text-gray-500">Loading...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function loadSecurityData() {
+            try {
+                const response = await axios.get('/dashboard/api/detection-events?limit=50');
+                if (response.data.status === 'success') {
+                    updateSecurityMetrics(response.data);
+                }
+            } catch (error) {
+                console.error('Error loading security data:', error);
+            }
+        }
+
+        function updateSecurityMetrics(data) {
+            const events = data.events || [];
+            
+            // Update metrics
+            document.getElementById('active-threats').textContent = events.filter(e => e.risk_score > 70).length;
+            document.getElementById('malicious-ips').textContent = new Set(events.map(e => e.ip)).size;
+            
+            // Update events table
+            const container = document.getElementById('security-events');
+            container.innerHTML = events.slice(0, 10).map(event => `
+                <div class="border-l-4 border-red-500 pl-4 py-2">
+                    <div class="flex justify-between">
+                        <span class="font-semibold">${event.ip}</span>
+                        <span class="text-red-600 font-bold">${event.risk_score.toFixed(1)}</span>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        ${event.detection_type} • ${new Date(event.timestamp).toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadSecurityData);
+
+        // Refresh every 10 seconds
+        setInterval(loadSecurityData, 10000);
+    </script>
+
+    <!-- Dashboard Client -->
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>
+</html>

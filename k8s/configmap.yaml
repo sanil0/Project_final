@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ddos-protection-config
+  namespace: ddos-protection
+data:
+  LOG_LEVEL: "INFO"
+  WORKERS: "auto"
+  MAX_WORKERS: "8"
+  TIMEOUT: "120"
+  SENSITIVITY_LEVEL: "medium"
+  BASE_RATE_LIMIT: "120"
+  ENABLE_MODEL_CACHE: "true"
+  UPSTREAM_BASE_URL: "http://target-app.default.svc.cluster.local"
+  MODEL_UPDATE_INTERVAL_HOURS: "24"
+  FEATURE_WINDOW_SECONDS: "300"
+  DYNAMIC_RATE_ADJUSTMENT: "true"
+  PROGRESSIVE_BLOCKING: "true"
+  BLOCK_DURATION_MINUTES: "30"
+  MAX_BLOCK_DURATION_HOURS: "24"

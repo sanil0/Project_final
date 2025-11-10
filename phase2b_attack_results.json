@@ -1,0 +1,932 @@
+{
+  "metadata": {
+    "test_type": "Phase 2b - Sequential Attack Pattern",
+    "proxy_url": "http://127.0.0.1:8080",
+    "rate_limit": "100 requests/60s",
+    "test_configuration": {
+      "waves": 5,
+      "requests_per_wave": 20,
+      "total_requests": 100,
+      "spacing_within_wave": 0.1,
+      "spacing_between_waves": 2.0
+    },
+    "test_timestamp": "2025-11-08T22:25:47.954822"
+  },
+  "results": {
+    "total_requests": 100,
+    "total_allowed": 100,
+    "total_blocked": 0,
+    "success_rate": 100.0,
+    "block_rate": 0.0,
+    "threshold_exceeded_at_request": 100,
+    "threshold_exceeded_timestamp": null
+  },
+  "events": [
+    {
+      "wave": 1,
+      "request": 1,
+      "status": 200,
+      "response_time": 1.0010673999786377,
+      "timestamp": 1762620849.969786,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 2,
+      "status": 200,
+      "response_time": 0.6039674282073975,
+      "timestamp": 1762620850.6738377,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 3,
+      "status": 200,
+      "response_time": 0.6035230159759521,
+      "timestamp": 1762620851.3890336,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 4,
+      "status": 200,
+      "response_time": 0.6078412532806396,
+      "timestamp": 1762620852.1040118,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 5,
+      "status": 200,
+      "response_time": 0.9159889221191406,
+      "timestamp": 1762620853.131086,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 6,
+      "status": 200,
+      "response_time": 0.6102960109710693,
+      "timestamp": 1762620853.849507,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 7,
+      "status": 200,
+      "response_time": 0.5985524654388428,
+      "timestamp": 1762620854.5616019,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 8,
+      "status": 200,
+      "response_time": 0.8465001583099365,
+      "timestamp": 1762620855.519946,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 9,
+      "status": 200,
+      "response_time": 0.8762099742889404,
+      "timestamp": 1762620856.5046825,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 10,
+      "status": 200,
+      "response_time": 0.6116154193878174,
+      "timestamp": 1762620857.2172725,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 11,
+      "status": 200,
+      "response_time": 0.6153678894042969,
+      "timestamp": 1762620857.9431279,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 12,
+      "status": 200,
+      "response_time": 2.6614503860473633,
+      "timestamp": 1762620860.709286,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 13,
+      "status": 200,
+      "response_time": 0.5692410469055176,
+      "timestamp": 1762620861.3803213,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 14,
+      "status": 200,
+      "response_time": 0.5492513179779053,
+      "timestamp": 1762620862.0395572,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 15,
+      "status": 200,
+      "response_time": 0.7130348682403564,
+      "timestamp": 1762620862.859356,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 16,
+      "status": 200,
+      "response_time": 0.5992603302001953,
+      "timestamp": 1762620863.564836,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 17,
+      "status": 200,
+      "response_time": 0.7181141376495361,
+      "timestamp": 1762620864.394616,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 18,
+      "status": 200,
+      "response_time": 0.6087620258331299,
+      "timestamp": 1762620865.1128304,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 19,
+      "status": 200,
+      "response_time": 0.7023401260375977,
+      "timestamp": 1762620865.9311314,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 1,
+      "request": 20,
+      "status": 200,
+      "response_time": 1.52557373046875,
+      "timestamp": 1762620867.5572162,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 1,
+      "status": 200,
+      "response_time": 1.1081666946411133,
+      "timestamp": 1762620871.257437,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 2,
+      "status": 200,
+      "response_time": 0.6097025871276855,
+      "timestamp": 1762620871.9741123,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 3,
+      "status": 200,
+      "response_time": 0.6136021614074707,
+      "timestamp": 1762620872.692947,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 4,
+      "status": 200,
+      "response_time": 1.0194759368896484,
+      "timestamp": 1762620873.8163962,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 5,
+      "status": 200,
+      "response_time": 0.7112479209899902,
+      "timestamp": 1762620874.632593,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 6,
+      "status": 200,
+      "response_time": 0.5441892147064209,
+      "timestamp": 1762620875.2905815,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 7,
+      "status": 200,
+      "response_time": 1.5052273273468018,
+      "timestamp": 1762620876.897872,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 8,
+      "status": 200,
+      "response_time": 2.0607995986938477,
+      "timestamp": 1762620879.0701559,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 9,
+      "status": 200,
+      "response_time": 0.672353982925415,
+      "timestamp": 1762620879.8549192,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 10,
+      "status": 200,
+      "response_time": 1.0244324207305908,
+      "timestamp": 1762620880.984544,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 11,
+      "status": 200,
+      "response_time": 0.609180212020874,
+      "timestamp": 1762620881.699758,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 12,
+      "status": 200,
+      "response_time": 0.6141810417175293,
+      "timestamp": 1762620882.4139903,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 13,
+      "status": 200,
+      "response_time": 0.8778562545776367,
+      "timestamp": 1762620883.406583,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 14,
+      "status": 200,
+      "response_time": 0.740656852722168,
+      "timestamp": 1762620884.2540967,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 15,
+      "status": 200,
+      "response_time": 1.0093879699707031,
+      "timestamp": 1762620885.3859706,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 16,
+      "status": 200,
+      "response_time": 1.2272698879241943,
+      "timestamp": 1762620886.71634,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 17,
+      "status": 200,
+      "response_time": 0.6123933792114258,
+      "timestamp": 1762620887.4336069,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 18,
+      "status": 200,
+      "response_time": 0.6050281524658203,
+      "timestamp": 1762620888.150389,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 19,
+      "status": 200,
+      "response_time": 1.0284671783447266,
+      "timestamp": 1762620889.2792394,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 2,
+      "request": 20,
+      "status": 200,
+      "response_time": 0.7129032611846924,
+      "timestamp": 1762620890.0981352,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 1,
+      "status": 200,
+      "response_time": 0.9078266620635986,
+      "timestamp": 1762620893.5218134,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 2,
+      "status": 200,
+      "response_time": 0.6503510475158691,
+      "timestamp": 1762620894.2803853,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 3,
+      "status": 200,
+      "response_time": 0.8250634670257568,
+      "timestamp": 1762620895.2087908,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 4,
+      "status": 200,
+      "response_time": 0.820249080657959,
+      "timestamp": 1762620896.1364057,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 5,
+      "status": 200,
+      "response_time": 0.6113564968109131,
+      "timestamp": 1762620896.8537245,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 6,
+      "status": 200,
+      "response_time": 0.6035943031311035,
+      "timestamp": 1762620897.5639558,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 7,
+      "status": 200,
+      "response_time": 1.5375659465789795,
+      "timestamp": 1762620899.210249,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 8,
+      "status": 200,
+      "response_time": 1.0215003490447998,
+      "timestamp": 1762620900.33362,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 9,
+      "status": 200,
+      "response_time": 1.4244842529296875,
+      "timestamp": 1762620901.8724248,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 10,
+      "status": 200,
+      "response_time": 0.6052756309509277,
+      "timestamp": 1762620902.5903397,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 11,
+      "status": 200,
+      "response_time": 0.814791202545166,
+      "timestamp": 1762620903.5109496,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 12,
+      "status": 200,
+      "response_time": 0.6040382385253906,
+      "timestamp": 1762620904.228139,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 13,
+      "status": 200,
+      "response_time": 0.5501236915588379,
+      "timestamp": 1762620904.883801,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 14,
+      "status": 200,
+      "response_time": 1.9300651550292969,
+      "timestamp": 1762620906.9169738,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 15,
+      "status": 200,
+      "response_time": 1.1019306182861328,
+      "timestamp": 1762620908.1198862,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 16,
+      "status": 200,
+      "response_time": 0.6081655025482178,
+      "timestamp": 1762620908.8356864,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 17,
+      "status": 200,
+      "response_time": 0.8123605251312256,
+      "timestamp": 1762620909.7546694,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 18,
+      "status": 200,
+      "response_time": 0.30988383293151855,
+      "timestamp": 1762620910.1666124,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 19,
+      "status": 200,
+      "response_time": 0.4071214199066162,
+      "timestamp": 1762620910.6759033,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 3,
+      "request": 20,
+      "status": 200,
+      "response_time": 0.7183136940002441,
+      "timestamp": 1762620911.4978654,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 1,
+      "status": 200,
+      "response_time": 1.1707305908203125,
+      "timestamp": 1762620915.1840692,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 2,
+      "status": 200,
+      "response_time": 3.4609103202819824,
+      "timestamp": 1762620918.7496116,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 3,
+      "status": 200,
+      "response_time": 0.42186903953552246,
+      "timestamp": 1762620919.279695,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 4,
+      "status": 200,
+      "response_time": 1.9555819034576416,
+      "timestamp": 1762620921.3408875,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 5,
+      "status": 200,
+      "response_time": 0.6933200359344482,
+      "timestamp": 1762620922.1479607,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 6,
+      "status": 200,
+      "response_time": 0.3211705684661865,
+      "timestamp": 1762620922.5711496,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 7,
+      "status": 200,
+      "response_time": 0.38582754135131836,
+      "timestamp": 1762620923.0661883,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 8,
+      "status": 200,
+      "response_time": 1.0249266624450684,
+      "timestamp": 1762620924.1952002,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 9,
+      "status": 200,
+      "response_time": 0.4069216251373291,
+      "timestamp": 1762620924.7079964,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 10,
+      "status": 200,
+      "response_time": 0.35959410667419434,
+      "timestamp": 1762620925.1776123,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 11,
+      "status": 200,
+      "response_time": 0.3446927070617676,
+      "timestamp": 1762620925.6287074,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 12,
+      "status": 200,
+      "response_time": 0.39669156074523926,
+      "timestamp": 1762620926.1410847,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 13,
+      "status": 200,
+      "response_time": 0.40066957473754883,
+      "timestamp": 1762620926.6545517,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 14,
+      "status": 200,
+      "response_time": 0.30439090728759766,
+      "timestamp": 1762620927.0688863,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 15,
+      "status": 200,
+      "response_time": 0.4070756435394287,
+      "timestamp": 1762620927.5763037,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 16,
+      "status": 200,
+      "response_time": 0.39868712425231934,
+      "timestamp": 1762620928.0869732,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 17,
+      "status": 200,
+      "response_time": 1.340531826019287,
+      "timestamp": 1762620929.5322604,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 18,
+      "status": 200,
+      "response_time": 0.6984963417053223,
+      "timestamp": 1762620930.3395638,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 19,
+      "status": 200,
+      "response_time": 0.5103709697723389,
+      "timestamp": 1762620930.9547124,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 4,
+      "request": 20,
+      "status": 200,
+      "response_time": 1.114495038986206,
+      "timestamp": 1762620932.1821167,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 1,
+      "status": 200,
+      "response_time": 0.36497044563293457,
+      "timestamp": 1762620935.0546472,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 2,
+      "status": 200,
+      "response_time": 0.49834489822387695,
+      "timestamp": 1762620935.6553192,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 3,
+      "status": 200,
+      "response_time": 0.3061497211456299,
+      "timestamp": 1762620936.0712855,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 4,
+      "status": 200,
+      "response_time": 0.3072340488433838,
+      "timestamp": 1762620936.4834907,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 5,
+      "status": 200,
+      "response_time": 0.8161249160766602,
+      "timestamp": 1762620937.4058533,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 6,
+      "status": 200,
+      "response_time": 0.2999246120452881,
+      "timestamp": 1762620937.816931,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 7,
+      "status": 200,
+      "response_time": 0.40410423278808594,
+      "timestamp": 1762620938.3252425,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 8,
+      "status": 200,
+      "response_time": 0.6063227653503418,
+      "timestamp": 1762620939.0421624,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 9,
+      "status": 200,
+      "response_time": 0.6098177433013916,
+      "timestamp": 1762620939.7604403,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 10,
+      "status": 200,
+      "response_time": 1.125023603439331,
+      "timestamp": 1762620940.988659,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 11,
+      "status": 200,
+      "response_time": 0.4111361503601074,
+      "timestamp": 1762620941.5020492,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 12,
+      "status": 200,
+      "response_time": 0.30728960037231445,
+      "timestamp": 1762620941.911801,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 13,
+      "status": 200,
+      "response_time": 0.9128143787384033,
+      "timestamp": 1762620942.931207,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 14,
+      "status": 200,
+      "response_time": 0.3126840591430664,
+      "timestamp": 1762620943.3476696,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 15,
+      "status": 200,
+      "response_time": 0.9123365879058838,
+      "timestamp": 1762620944.3617933,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 16,
+      "status": 200,
+      "response_time": 0.7942414283752441,
+      "timestamp": 1762620945.2596612,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 17,
+      "status": 200,
+      "response_time": 0.28964757919311523,
+      "timestamp": 1762620945.6540816,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 18,
+      "status": 200,
+      "response_time": 0.6509814262390137,
+      "timestamp": 1762620946.411321,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 19,
+      "status": 200,
+      "response_time": 0.706989049911499,
+      "timestamp": 1762620947.233805,
+      "allowed": true,
+      "blocked": false
+    },
+    {
+      "wave": 5,
+      "request": 20,
+      "status": 200,
+      "response_time": 0.6129815578460693,
+      "timestamp": 1762620947.9548225,
+      "allowed": true,
+      "blocked": false
+    }
+  ],
+  "summary": {
+    "phase_2b_status": "ATTACK PATTERN EXECUTED",
+    "rate_limiting_active": false,
+    "detection_triggered": false,
+    "expected_behavior": "Rate limit should trigger around request 100-110"
+  }
+}
