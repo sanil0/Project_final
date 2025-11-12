@@ -174,9 +174,17 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     try:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
-        total_requests = requests_total._value.get() if hasattr(requests_total, '_value') else 0
-        total_blocked = requests_blocked_total._value.get() if hasattr(requests_blocked_total, '_value') else 0
-        active_ips = active_blocked_ips._value if hasattr(active_blocked_ips, '_value') else 0
+        # Prometheus Counter and Gauge expose() methods return collected metrics
+        # We need to extract the actual values from the metric objects
+        try:
+            total_requests = float(requests_total._value.get()) if hasattr(requests_total, '_value') else 0
+            total_blocked = float(requests_blocked_total._value.get()) if hasattr(requests_blocked_total, '_value') else 0
+            active_ips = float(active_blocked_ips._value) if hasattr(active_blocked_ips, '_value') else 0
+        except (TypeError, AttributeError):
+            # Fallback: Prometheus objects might not have _value in all versions
+            total_requests = 0
+            total_blocked = 0
+            active_ips = 0
         
         block_rate = (total_blocked / total_requests * 100) if total_requests > 0 else 0
         
