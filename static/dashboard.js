@@ -282,7 +282,9 @@ class DashboardClient {
 
     async fetchMetrics() {
         try {
-            const response = await axios.get('/dashboard/api/metrics');
+            const response = await axios.get('/dashboard/api/metrics', {
+                withCredentials: true
+            });
             this.updateMetrics(response.data);
         } catch (error) {
             console.error('Error fetching metrics:', error);
@@ -348,7 +350,9 @@ class DashboardClient {
 
     async fetchTrafficData(timeRange = '24h') {
         try {
-            const response = await axios.get(`/dashboard/api/traffic?time_range=${timeRange}`);
+            const response = await axios.get(`/dashboard/api/traffic?time_range=${timeRange}`, {
+                withCredentials: true
+            });
             this.updateTrafficCharts(response.data);
         } catch (error) {
             console.error('Error fetching traffic data:', error);
@@ -404,7 +408,9 @@ class DashboardClient {
 
     async fetchSecurityData() {
         try {
-            const response = await axios.get('/dashboard/api/detection-events');
+            const response = await axios.get('/dashboard/api/detection-events', {
+                withCredentials: true
+            });
             this.updateSecurityTable(response.data);
         } catch (error) {
             console.error('Error fetching security data:', error);
@@ -437,7 +443,9 @@ class DashboardClient {
 
     async fetchBlockedIPs() {
         try {
-            const response = await axios.get('/dashboard/api/blocked-ips');
+            const response = await axios.get('/dashboard/api/blocked-ips', {
+                withCredentials: true
+            });
             this.updateBlockedIPsTable(response.data);
         } catch (error) {
             console.error('Error fetching blocked IPs:', error);
@@ -466,7 +474,9 @@ class DashboardClient {
 
     async fetchMaliciousIPs() {
         try {
-            const response = await axios.get('/dashboard/api/detection-events');
+            const response = await axios.get('/dashboard/api/detection-events', {
+                withCredentials: true
+            });
             this.updateMaliciousIPsTable(response.data);
         } catch (error) {
             console.error('Error fetching malicious IPs:', error);
