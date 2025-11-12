@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Target Web Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        .status { color: #10b981; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Target Web Application</h1>
+        <p>Status: <span class="status">✓ Online</span></p>
+        <p>This is the test target application behind the WARP DDoS protection proxy.</p>
+        <hr>
+        <p><strong>Request ID:</strong> <code id="req-id">Loading...</code></p>
+        <p><strong>Timestamp:</strong> <code id="timestamp">Loading...</code></p>
+    </div>
+    <script>
+        document.getElementById('req-id').textContent = Math.random().toString(36).substr(2, 9);
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+    </script>
+</body>
+</html>
