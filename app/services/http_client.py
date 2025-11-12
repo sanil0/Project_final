@@ -26,11 +26,14 @@ class UpstreamHTTPClient:
                     try:
                         self._client = httpx.AsyncClient(
                             base_url=self._base_url,
-                            timeout=self._timeout,
-                            follow_redirects=True
+                            timeout=httpx.Timeout(self._timeout),
+                            follow_redirects=True,
+                            limits=httpx.Limits(max_connections=100, max_keepalive_connections=20)
                         )
+                        self._logger.info(f"HTTP client initialized for {self._base_url}")
                     except Exception as e:
                         self._logger.error(f"Failed to create HTTP client: {e}", exc_info=True)
+                        self._client = None
                         raise
             
     async def forward(
@@ -40,11 +43,12 @@ class UpstreamHTTPClient:
         headers: Dict[str, str],
         content: Optional[bytes] = None,
     ) -> httpx.Response:
-        await self._ensure_client()
         last_error = None
         
         for attempt in range(self._max_retries):
             try:
+                await self._ensure_client()
+                
                 # Do NOT serialize requests via the global lock: allow concurrent requests
                 response = await self._client.request(
                     method=method,
