@@ -26,13 +26,13 @@ class UpstreamHTTPClient:
                     try:
                         self._client = httpx.AsyncClient(
                             base_url=self._base_url,
-                            timeout=httpx.Timeout(self._timeout),
+                            timeout=httpx.Timeout(self._timeout, connect=20.0),
                             follow_redirects=True,
                             limits=httpx.Limits(max_connections=100, max_keepalive_connections=20)
                         )
-                        self._logger.info(f"HTTP client initialized for {self._base_url}")
+                        self._logger.info(f"✅ HTTP client initialized for {self._base_url}")
                     except Exception as e:
-                        self._logger.error(f"Failed to create HTTP client: {e}", exc_info=True)
+                        self._logger.error(f"❌ Failed to create HTTP client: {e}", exc_info=True)
                         self._client = None
                         raise
             
