@@ -51,6 +51,7 @@ COPY --from=builder /opt/venv /opt/venv
 COPY app/ ./app/
 COPY models/ ./models/
 COPY templates/ ./templates/
+COPY static/ ./static/
 COPY .env.example .env.local
 
 # Create non-root user for security
