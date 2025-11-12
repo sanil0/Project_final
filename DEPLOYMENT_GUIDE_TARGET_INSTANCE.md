@@ -197,10 +197,10 @@ sudo apt upgrade -y
 sudo apt install -y python3 python3-pip git curl wget
 ```
 
-### **13.3 - Clone Repository**
+### **13.3 - Clone Target Webapp Repository**
 ```bash
-git clone https://github.com/sanil0/Project_final.git
-cd Project_final
+git clone https://github.com/sanil0/target-webapp.git
+cd target-webapp
 ```
 
 ### **13.4 - Install Python Dependencies**
@@ -208,9 +208,13 @@ cd Project_final
 pip install -r requirements.txt
 ```
 
-### **13.5 - Run the Webapp**
+### **13.5 - Create Missing Directories**
 ```bash
-cd webapp
+mkdir -p static
+```
+
+### **13.6 - Run the Webapp**
+```bash
 python3 -m uvicorn main:app --host 0.0.0.0 --port 8001
 ```
 
@@ -226,11 +230,16 @@ INFO:     Application startup complete.
 
 ### **14.1 - Test from Windows**
 ```powershell
-# Test public IP
+# Set your target instance's public IP (from Step 11)
 $target_ip = "54.123.45.67"
-curl "http://$target_ip:8001"
 
-# Should return HTML content
+# Test with Invoke-WebRequest (PowerShell's curl)
+Invoke-WebRequest -Uri "http://$target_ip:8001" -UseBasicParsing
+
+# Or use curl.exe if available
+curl.exe "http://$target_ip:8001"
+
+# Should return HTML content with PDF library interface
 ```
 
 ### **14.2 - View in Browser**
@@ -254,23 +263,17 @@ ssh -i "C:\Users\Lenovo\Downloads\DDoS-copilot.pem" ubuntu@ec2-98-88-5-133.compu
 ```bash
 cd ~/Project_final
 
-# Edit environment file
-nano docker-compose.yml
+# Create/update .env.production file
+nano .env.production
 ```
 
-Find the `UPSTREAM_BASE_URL` line and update:
-
-**From:**
+Add or update this line with your target instance's **private IP**:
 ```
-UPSTREAM_BASE_URL=http://target-app:8080
-```
-
-**To:**
-```
-UPSTREAM_BASE_URL=http://10.0.1.50:8001
+UPSTREAM_BASE_URL=http://10.0.1.65:8001
+TARGET_URL=http://10.0.1.65:8001
 ```
 
-(Replace 10.0.1.50 with your actual target private IP)
+(Replace `10.0.1.65` with your actual target **private IP** from AWS console)
 
 ### **15.4 - Save and Exit**
 - Press: `Ctrl + X`
@@ -290,17 +293,17 @@ docker-compose ps
 
 ### **16.1 - Generate Traffic**
 ```powershell
-# From Windows, send requests through WARP proxy
+# Set your WARP instance's IP
 $warp_ip = "98.88.5.133"
 
 # Test 1: Simple request
-curl "http://$warp_ip:8080/"
+Invoke-WebRequest -Uri "http://$warp_ip:8080/" -UseBasicParsing
 
 # Test 2: List PDFs
-curl "http://$warp_ip:8080/list"
+Invoke-WebRequest -Uri "http://$warp_ip:8080/list" -UseBasicParsing
 
 # Test 3: Search
-curl "http://$warp_ip:8080/search?query=DDoS"
+Invoke-WebRequest -Uri "http://$warp_ip:8080/search?query=DDoS" -UseBasicParsing
 ```
 
 ### **16.2 - Check Dashboard**
