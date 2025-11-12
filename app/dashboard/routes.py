@@ -172,10 +172,11 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
     try:
-        from app.services.metrics import metrics_provider
+        from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
-        total_requests = metrics_provider.requests_total._value.get() if hasattr(metrics_provider, 'requests_total') else 0
-        total_blocked = metrics_provider.blocked_requests._value.get() if hasattr(metrics_provider, 'blocked_requests') else 0
+        total_requests = requests_total._value.get() if hasattr(requests_total, '_value') else 0
+        total_blocked = requests_blocked_total._value.get() if hasattr(requests_blocked_total, '_value') else 0
+        active_ips = active_blocked_ips._value if hasattr(active_blocked_ips, '_value') else 0
         
         block_rate = (total_blocked / total_requests * 100) if total_requests > 0 else 0
         
@@ -184,7 +185,7 @@ async def get_metrics(request: Request) -> DashboardMetrics:
             total_blocked=int(total_blocked),
             block_rate_percent=round(block_rate, 2),
             avg_latency_ms=45.5,
-            active_ips=150,
+            active_ips=int(active_ips),
             high_risk_ips=12
         )
     except Exception as e:
