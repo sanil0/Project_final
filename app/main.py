@@ -232,6 +232,13 @@ async def proxy_request(
     settings: Settings = Depends(get_settings_dep),
 ) -> Response:
     logger.debug("Processing request: %s %s", request.method, full_path)
+    import time
+    from .services.metrics import (
+        requests_total, requests_blocked_total, requests_allowed_total,
+        request_duration_seconds, active_blocked_ips, blocked_ips_total
+    )
+    
+    start_time = time.time()
     try:
         # Extract client IP using the new helper
         normalized_ip = extract_client_ip(
@@ -270,6 +277,14 @@ async def proxy_request(
 
             if not mitigation.allowed:
                 logger.warning(f"🛑 Blocking request from {normalized_ip}: {verdict.reason}")
+                # Record blocked metrics
+                requests_blocked_total.labels(reason=verdict.reason).inc()
+                blocked_ips_total.labels(reason=verdict.reason).inc()
+                active_blocked_ips.set(len(detection_engine.blocklist_ips) if detection_engine else 0)
+                
+                duration = time.time() - start_time
+                request_duration_seconds.labels(status='blocked').observe(duration)
+                
                 if verdict.action == MitigationAction.RATE_LIMIT:
                     return JSONResponse(status_code=429, content={"detail": "Rate limit applied"})
                 if verdict.action == MitigationAction.BLOCK:
@@ -279,6 +294,8 @@ async def proxy_request(
                 return JSONResponse(status_code=403, content={"detail": "Request denied"})
             else:
                 logger.debug(f"✅ Request from {normalized_ip} allowed")
+                # Record allowed metrics
+                requests_allowed_total.labels(risk_level=verdict.severity).inc()
         else:
             # Demo mode - allow all requests
             logger.debug(f"📋 Demo mode: allowing request from {normalized_ip}")
@@ -290,6 +307,11 @@ async def proxy_request(
             headers=headers,
             content=body if body else None,
         )
+
+        # Record total request metrics
+        requests_total.labels(status='allowed', method=request.method).inc()
+        duration = time.time() - start_time
+        request_duration_seconds.labels(status='allowed').observe(duration)
 
         return Response(
             content=upstream_response.content,
