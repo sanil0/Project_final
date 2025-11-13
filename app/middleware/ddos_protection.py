@@ -21,6 +21,15 @@ from app.schemas import TrafficSample, FeatureVector
 from collections import defaultdict
 import numpy as np
 
+# Import Prometheus metrics
+from app.services.metrics import (
+    requests_total,
+    requests_blocked_total,
+    requests_allowed_total,
+    active_blocked_ips,
+    risk_score_histogram
+)
+
 logger = logging.getLogger(__name__)
 
 class DDoSProtectionMiddleware(BaseHTTPMiddleware):
@@ -410,6 +419,9 @@ class DDoSProtectionMiddleware(BaseHTTPMiddleware):
                 logger.warning(f"ML prediction failed, using defaults: {e}")
                 prediction = {"risk_score": 0.0, "is_benign": True, "confidence": 1.0}
             
+            # Track risk score in Prometheus
+            risk_score_histogram.observe(prediction.get("risk_score", 0.0) / 100.0)
+            
             # Analyze request using ML prediction and features
             result = await engine.analyze_request(
                 client_ip,
@@ -437,6 +449,14 @@ class DDoSProtectionMiddleware(BaseHTTPMiddleware):
                     await mitigation.apply_block(client_ip)
                 except Exception:
                     pass
+                
+                # Track in Prometheus
+                try:
+                    requests_total.labels(status='blocked', method=request.method).inc()
+                    requests_blocked_total.labels(reason='high_risk').inc()
+                except Exception:
+                    pass
+                logger.info(f"🛡️ BLOCKED: {client_ip} - Risk: {prediction.get('risk_score', 0):.1f}")
 
                 return JSONResponse(
                     {"error": result.block_reason or "Request blocked: High-risk traffic pattern detected"},
@@ -461,10 +481,23 @@ class DDoSProtectionMiddleware(BaseHTTPMiddleware):
                         headers["X-RateLimit-Remaining"] = str(remaining)
                 except Exception:
                     pass
+                
+                # Track in Prometheus
+                requests_total.labels(status='rate_limited', method=request.method).inc()
+                requests_blocked_total.labels(reason='rate_limited').inc()
+                logger.info(f"⚠️ RATE LIMITED: {client_ip} - Risk: {prediction.get('risk_score', 0):.1f}")
                     
                 return JSONResponse({"error": "Rate Limited"}, status_code=429, headers=headers)
 
             # Allow request to proceed
+            # Track in Prometheus
+            try:
+                risk_level = 'high' if prediction.get('risk_score', 0) > 70 else 'medium' if prediction.get('risk_score', 0) > 30 else 'low'
+                requests_total.labels(status='allowed', method=request.method).inc()
+                requests_allowed_total.labels(risk_level=risk_level).inc()
+            except Exception:
+                pass
+            
             response = await call_next(request)
             # If no route is defined and tests expect 200/429 for root, return 200 OK
             try:
