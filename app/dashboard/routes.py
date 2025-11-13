@@ -172,17 +172,20 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
     try:
-        from app.main import http_client  # Import the HTTP client we use for forwarding
         from prometheus_client.exposition import generate_latest
         
-        # The SIMPLEST approach: use prometheus_client's built-in exposition format generator
-        # which correctly handles all metric serialization
         try:
             metrics_text = generate_latest().decode('utf-8')
+            
+            # DEBUG: Log what we're actually parsing
+            logger.info(f"Generated metrics text length: {len(metrics_text)}")
             
             total_requests = 0
             total_blocked = 0
             active_ips = 0
+            found_requests = False
+            found_blocked = False
+            found_ips = False
             
             # Parse the Prometheus text format
             for line in metrics_text.split('\n'):
@@ -190,32 +193,44 @@ async def get_metrics(request: Request) -> DashboardMetrics:
                 if not line or line.startswith('#'):
                     continue
                 
-                # Parse: metric_name{labels} value
-                # We want metrics that are the actual counter values (no _created suffix)
-                if line.startswith('ddos_requests_total') and '_created' not in line:
+                # Log each relevant line we find
+                if 'ddos_requests_total' in line and '_created' not in line:
+                    logger.info(f"Found requests line: {line}")
+                    found_requests = True
                     try:
-                        # Extract the value (last space-separated token)
                         value_str = line.rsplit(' ', 1)[-1]
-                        total_requests += float(value_str)
-                    except ValueError:
-                        pass
+                        val = float(value_str)
+                        logger.info(f"  Parsed value: {val}")
+                        total_requests += val
+                    except ValueError as e:
+                        logger.warning(f"  Failed to parse: {e}")
                 
-                elif line.startswith('ddos_requests_blocked_total') and '_created' not in line:
+                elif 'ddos_requests_blocked_total' in line and '_created' not in line:
+                    logger.info(f"Found blocked line: {line}")
+                    found_blocked = True
                     try:
                         value_str = line.rsplit(' ', 1)[-1]
-                        total_blocked += float(value_str)
-                    except ValueError:
-                        pass
+                        val = float(value_str)
+                        logger.info(f"  Parsed value: {val}")
+                        total_blocked += val
+                    except ValueError as e:
+                        logger.warning(f"  Failed to parse: {e}")
                 
                 elif line.startswith('ddos_active_blocked_ips '):
+                    logger.info(f"Found active_ips line: {line}")
+                    found_ips = True
                     try:
                         value_str = line.rsplit(' ', 1)[-1]
                         active_ips = float(value_str)
-                    except ValueError:
-                        pass
+                        logger.info(f"  Parsed value: {active_ips}")
+                    except ValueError as e:
+                        logger.warning(f"  Failed to parse: {e}")
+            
+            logger.info(f"Results: found_requests={found_requests}, found_blocked={found_blocked}, found_ips={found_ips}")
+            logger.info(f"Totals: requests={total_requests}, blocked={total_blocked}, ips={active_ips}")
         
         except Exception as e:
-            logger.error(f"Metrics parsing error: {e}")
+            logger.error(f"Metrics parsing error: {e}", exc_info=True)
             total_requests = 0
             total_blocked = 0
             active_ips = 0
@@ -231,7 +246,7 @@ async def get_metrics(request: Request) -> DashboardMetrics:
             high_risk_ips=12
         )
     except Exception as e:
-        logger.error(f"Error fetching metrics: {e}")
+        logger.error(f"Error fetching metrics: {e}", exc_info=True)
         # Fallback response
         return DashboardMetrics(
             total_requests=0,
