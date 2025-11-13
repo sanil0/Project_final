@@ -173,30 +173,35 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     
     try:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
+        from prometheus_client.exposition import generate_latest
         
-        # Extract metric values from prometheus_client metric objects
-        # For labeled Counters, ._metrics contains all label combinations
+        # DEBUG: Check what prometheus is actually exposing
         try:
+            # Get the raw Prometheus format to understand the actual values
+            prometheus_text = generate_latest().decode('utf-8')
+            
+            # Parse out the actual counter values from the Prometheus text format
             total_requests = 0
-            if hasattr(requests_total, '_metrics'):
-                # For labeled counters, sum the _value of each label combination
-                for metric_obj in requests_total._metrics.values():
-                    if hasattr(metric_obj, '_value'):
-                        total_requests += float(metric_obj._value.get())
-            
             total_blocked = 0
-            if hasattr(requests_blocked_total, '_metrics'):
-                for metric_obj in requests_blocked_total._metrics.values():
-                    if hasattr(metric_obj, '_value'):
-                        total_blocked += float(metric_obj._value.get())
-            
-            # For Gauge (no labels), check _value directly
             active_ips = 0
-            if hasattr(active_blocked_ips, '_value'):
-                active_ips = float(active_blocked_ips._value)
+            
+            for line in prometheus_text.split('\n'):
+                if line.startswith('ddos_requests_total{') and '_created' not in line:
+                    # Extract value from: ddos_requests_total{method="GET",status="allowed"} 25.0
+                    parts = line.rsplit(' ', 1)
+                    if len(parts) == 2:
+                        total_requests += float(parts[1])
+                elif line.startswith('ddos_requests_blocked_total{') and '_created' not in line:
+                    parts = line.rsplit(' ', 1)
+                    if len(parts) == 2:
+                        total_blocked += float(parts[1])
+                elif line.startswith('ddos_active_blocked_ips '):
+                    parts = line.rsplit(' ', 1)
+                    if len(parts) == 2:
+                        active_ips = float(parts[1])
         
-        except (TypeError, AttributeError, ValueError) as e:
-            logger.warning(f"Metrics extraction error: {e}")
+        except Exception as e:
+            logger.error(f"Error parsing Prometheus metrics: {e}")
             total_requests = 0
             total_blocked = 0
             active_ips = 0
