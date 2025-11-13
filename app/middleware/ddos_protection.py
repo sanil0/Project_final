@@ -275,7 +275,15 @@ class DDoSProtectionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         """Process each request through the DDoS protection pipeline."""
         
+        # Log that middleware is processing the request
+        logger.info(f"🛡️ DDoS Middleware processing: {request.method} {request.url.path}")
+        
         try:
+            # Skip middleware for /metrics and /dashboard endpoints
+            if request.url.path in ["/metrics", "/favicon.ico"] or request.url.path.startswith("/dashboard") or request.url.path.startswith("/static"):
+                logger.debug(f"Skipping DDoS check for: {request.url.path}")
+                return await call_next(request)
+            
             # Refresh services from app.state if tests injected/mutated them after initialization
             try:
                 if hasattr(self.base_app, 'state'):
@@ -386,13 +394,28 @@ class DDoSProtectionMiddleware(BaseHTTPMiddleware):
             else:
                 features = self.calculate_features(client_ip, current_time, content_length)
             
-            # Analyze request using calculated features
-            prediction_defaults = {"risk_score": 0.0, "is_benign": True, "confidence": 1.0}
+            # Get ML prediction using the prediction service
+            try:
+                ml_prediction = await self.prediction_service.predict(
+                    features=features or {},
+                    sensitivity_level=self.sensitivity_level
+                )
+                prediction = {
+                    "risk_score": ml_prediction.get("risk_score", 0.0),
+                    "is_benign": ml_prediction.get("is_benign", True),
+                    "confidence": ml_prediction.get("confidence", 1.0),
+                    "feature_contributions": ml_prediction.get("feature_contributions", {})
+                }
+            except Exception as e:
+                logger.warning(f"ML prediction failed, using defaults: {e}")
+                prediction = {"risk_score": 0.0, "is_benign": True, "confidence": 1.0}
+            
+            # Analyze request using ML prediction and features
             result = await engine.analyze_request(
                 client_ip,
                 current_time,
                 features or {},
-                prediction_defaults
+                prediction
             )
 
             # Check if request should be blocked

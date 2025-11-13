@@ -44,6 +44,17 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Intelligent DDoS Detection & Mitigation")
 
+# Add DDoS protection middleware with ML-based detection (MUST BE FIRST)
+from .middleware.ddos_protection import DDoSProtectionMiddleware
+
+app.add_middleware(
+    DDoSProtectionMiddleware,
+    model_path="models",
+    sensitivity_level="medium",
+    window_size=60,  # 60 seconds window
+    cleanup_interval=300  # Clean old data every 5 minutes
+)
+
 # Add SessionMiddleware for dashboard authentication
 # Note: In production, use a secure secret key from environment
 app.add_middleware(
@@ -74,18 +85,6 @@ async def metrics():
 async def health():
     """Health check endpoint."""
     return {"status": "healthy", "version": "1.0.0"}
-
-
-# Add DDoS protection middleware
-from .middleware.ddos_protection import DDoSProtectionMiddleware
-# TEMPORARILY DISABLED FOR DEBUGGING - middleware causing app to shut down
-# app.add_middleware(
-#     DDoSProtectionMiddleware,
-#     model_path="models",
-#     sensitivity_level="medium",
-#     window_size=60,  # 60 seconds window
-#     cleanup_interval=300  # Clean old data every 5 minutes
-# )
 
 
 @app.on_event("startup")
