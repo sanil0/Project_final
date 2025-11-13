@@ -171,53 +171,15 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     if not check_auth(request):
         raise HTTPException(status_code=401, detail="Unauthorized")
     
-    try:
-        from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
-        
-        # Extract metric values from Prometheus objects
-        # For Counters, iterate through metrics and sum the values
-        try:
-            total_requests = 0
-            collected_requests = requests_total.collect()
-            logger.info(f"DEBUG: requests_total collected - type: {type(collected_requests)}, len: {len(collected_requests) if collected_requests else 0}")
-            if collected_requests:
-                samples = collected_requests[0].samples
-                logger.info(f"DEBUG: requests_total samples - count: {len(samples)}, samples: {samples}")
-                for metric in samples:
-                    total_requests += metric.value
-            logger.info(f"DEBUG: total_requests calculated: {total_requests}")
-            
-            total_blocked = 0
-            collected_blocked = requests_blocked_total.collect()
-            if collected_blocked:
-                for metric in collected_blocked[0].samples:
-                    total_blocked += metric.value
-            
-            # For Gauge, get the current value
-            active_ips = 0
-            collected_ips = active_blocked_ips.collect()
-            if collected_ips and collected_ips[0].samples:
-                active_ips = collected_ips[0].samples[0].value
-        except (TypeError, AttributeError, IndexError) as e:
-            # Fallback if metrics not yet collected
-            logger.error(f"DEBUG: Exception in metrics extraction: {type(e).__name__}: {e}")
-            total_requests = 0
-            total_blocked = 0
-            active_ips = 0
-        
-        block_rate = (total_blocked / total_requests * 100) if total_requests > 0 else 0
-        
-        return DashboardMetrics(
-            total_requests=int(total_requests),
-            total_blocked=int(total_blocked),
-            block_rate_percent=round(block_rate, 2),
-            avg_latency_ms=45.5,
-            active_ips=int(active_ips),
-            high_risk_ips=12
-        )
-    except Exception as e:
-        logger.error(f"Error fetching metrics: {e}")
-        raise HTTPException(status_code=500, detail="Failed to fetch metrics")
+    # TEMPORARY: Return test data to verify endpoint is working
+    return DashboardMetrics(
+        total_requests=999,
+        total_blocked=888,
+        block_rate_percent=88.8,
+        avg_latency_ms=45.5,
+        active_ips=12,
+        high_risk_ips=12
+    )
 
 
 @router.get("/api/traffic")
