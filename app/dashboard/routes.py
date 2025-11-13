@@ -175,29 +175,27 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
         # Extract metric values directly from Counter objects using .collect()
-        # This is the official prometheus_client way to get metric values
         try:
             total_requests = 0
-            # Counter.collect() returns a list of MetricFamily objects
-            # Each MetricFamily has a .samples list with the actual values
             for family in requests_total.collect():
-                # For a Counter, each label combination produces one sample
-                # plus one _created timestamp sample we should skip
                 for sample in family.samples:
-                    if '_created' not in sample.name and 'total' in sample.name:
+                    # ONLY sum samples that end with _total (not _created)
+                    # _created samples have timestamps and should be excluded
+                    if sample.name.endswith('_total'):
                         total_requests += sample.value
             
             total_blocked = 0
             for family in requests_blocked_total.collect():
                 for sample in family.samples:
-                    if '_created' not in sample.name and 'total' in sample.name:
+                    # Skip samples ending with _created
+                    if sample.name.endswith('_total'):
                         total_blocked += sample.value
             
-            # For Gauge (no _created variant usually)
+            # For Gauge (no suffixes), just take the first value
             active_ips = 0
             for family in active_blocked_ips.collect():
                 for sample in family.samples:
-                    active_ips = sample.value  # Just take the first/only value
+                    active_ips = sample.value
                     break
         
         except Exception as e:
