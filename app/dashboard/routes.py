@@ -174,29 +174,25 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     try:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
-        # Extract metric values from Prometheus objects
-        # prometheus_client counters generate both the counter and a _created timestamp
-        # We need to skip the _created metrics and sum only the actual counter values
+        # Extract metric values directly from prometheus_client metric objects
+        # prometheus_client Counter has ._value attribute containing the actual count
         try:
+            # For Counter objects, use ._value.get() to extract the actual value
             total_requests = 0
-            for metric in requests_total.collect()[0].samples:
-                # Skip the _created timestamp metric, only count the actual counter
-                if not metric.name.endswith('_created'):
-                    total_requests += metric.value
-
+            if hasattr(requests_total, '_value'):
+                total_requests = float(requests_total._value.get())
+            
             total_blocked = 0
-            for metric in requests_blocked_total.collect()[0].samples:
-                if not metric.name.endswith('_created'):
-                    total_blocked += metric.value
-
-            # For Gauge, get the current value (first non-_created sample)
+            if hasattr(requests_blocked_total, '_value'):
+                total_blocked = float(requests_blocked_total._value.get())
+            
+            # For Gauge, just access ._value directly
             active_ips = 0
-            for metric in active_blocked_ips.collect()[0].samples:
-                if not metric.name.endswith('_created'):
-                    active_ips = metric.value
-                    break
-        except (TypeError, AttributeError, IndexError):
-            # Fallback if metrics not yet collected
+            if hasattr(active_blocked_ips, '_value'):
+                active_ips = float(active_blocked_ips._value)
+        
+        except (TypeError, AttributeError, ValueError) as e:
+            logger.warning(f"Metrics extraction error: {e}")
             total_requests = 0
             total_blocked = 0
             active_ips = 0
