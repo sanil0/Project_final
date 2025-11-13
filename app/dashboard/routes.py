@@ -172,34 +172,50 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         raise HTTPException(status_code=401, detail="Unauthorized")
     
     try:
-        from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
+        from app.main import http_client  # Import the HTTP client we use for forwarding
+        from prometheus_client.exposition import generate_latest
         
-        # Extract metric values directly from Counter objects using .collect()
+        # The SIMPLEST approach: use prometheus_client's built-in exposition format generator
+        # which correctly handles all metric serialization
         try:
+            metrics_text = generate_latest().decode('utf-8')
+            
             total_requests = 0
-            for family in requests_total.collect():
-                for sample in family.samples:
-                    # ONLY sum samples that end with _total (not _created)
-                    # _created samples have timestamps and should be excluded
-                    if sample.name.endswith('_total'):
-                        total_requests += sample.value
-            
             total_blocked = 0
-            for family in requests_blocked_total.collect():
-                for sample in family.samples:
-                    # Skip samples ending with _created
-                    if sample.name.endswith('_total'):
-                        total_blocked += sample.value
-            
-            # For Gauge (no suffixes), just take the first value
             active_ips = 0
-            for family in active_blocked_ips.collect():
-                for sample in family.samples:
-                    active_ips = sample.value
-                    break
+            
+            # Parse the Prometheus text format
+            for line in metrics_text.split('\n'):
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                
+                # Parse: metric_name{labels} value
+                # We want metrics that are the actual counter values (no _created suffix)
+                if line.startswith('ddos_requests_total') and '_created' not in line:
+                    try:
+                        # Extract the value (last space-separated token)
+                        value_str = line.rsplit(' ', 1)[-1]
+                        total_requests += float(value_str)
+                    except ValueError:
+                        pass
+                
+                elif line.startswith('ddos_requests_blocked_total') and '_created' not in line:
+                    try:
+                        value_str = line.rsplit(' ', 1)[-1]
+                        total_blocked += float(value_str)
+                    except ValueError:
+                        pass
+                
+                elif line.startswith('ddos_active_blocked_ips '):
+                    try:
+                        value_str = line.rsplit(' ', 1)[-1]
+                        active_ips = float(value_str)
+                    except ValueError:
+                        pass
         
         except Exception as e:
-            logger.error(f"Metrics collection error: {e}")
+            logger.error(f"Metrics parsing error: {e}")
             total_requests = 0
             total_blocked = 0
             active_ips = 0
