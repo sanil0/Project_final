@@ -167,70 +167,62 @@ async def settings_page(request: Request):
 
 @router.get("/api/metrics")
 async def get_metrics(request: Request) -> DashboardMetrics:
-    """Get current metrics snapshot."""
+    """Get current metrics snapshot - query the /metrics endpoint directly."""
     if not check_auth(request):
         raise HTTPException(status_code=401, detail="Unauthorized")
     
     try:
-        from prometheus_client.exposition import generate_latest
+        import httpx
+        import re
         
         try:
-            metrics_text = generate_latest().decode('utf-8')
-            
-            # DEBUG: Log what we're actually parsing
-            logger.info(f"Generated metrics text length: {len(metrics_text)}")
+            # Query our own /metrics endpoint which is guaranteed to be correct
+            async with httpx.AsyncClient() as client:
+                response = await client.get('http://127.0.0.1:8080/metrics', timeout=2)
+                metrics_text = response.text
             
             total_requests = 0
             total_blocked = 0
             active_ips = 0
-            found_requests = False
-            found_blocked = False
-            found_ips = False
             
-            # Parse the Prometheus text format
+            # Parse Prometheus text format - look for our specific metrics
             for line in metrics_text.split('\n'):
-                line = line.strip()
-                if not line or line.startswith('#'):
-                    continue
-                
-                # Log each relevant line we find
-                if 'ddos_requests_total' in line and '_created' not in line:
-                    logger.info(f"Found requests line: {line}")
-                    found_requests = True
+                # ddos_requests_total{method="GET",status="allowed"} 60.0
+                if line.startswith('ddos_requests_total{') and '_created' not in line:
                     try:
-                        value_str = line.rsplit(' ', 1)[-1]
-                        val = float(value_str)
-                        logger.info(f"  Parsed value: {val}")
-                        total_requests += val
-                    except ValueError as e:
-                        logger.warning(f"  Failed to parse: {e}")
+                        match = re.search(r'\}\s+([\d.]+)$', line)
+                        if match:
+                            total_requests += float(match.group(1))
+                    except (ValueError, AttributeError):
+                        pass
                 
-                elif 'ddos_requests_blocked_total' in line and '_created' not in line:
-                    logger.info(f"Found blocked line: {line}")
-                    found_blocked = True
+                # ddos_requests_blocked_total{reason="..."} value
+                elif line.startswith('ddos_requests_blocked_total{') and '_created' not in line:
                     try:
-                        value_str = line.rsplit(' ', 1)[-1]
-                        val = float(value_str)
-                        logger.info(f"  Parsed value: {val}")
-                        total_blocked += val
-                    except ValueError as e:
-                        logger.warning(f"  Failed to parse: {e}")
+                        match = re.search(r'\}\s+([\d.]+)$', line)
+                        if match:
+                            total_blocked += float(match.group(1))
+                    except (ValueError, AttributeError):
+                        pass
                 
+                # ddos_active_blocked_ips value
+                elif line == 'ddos_active_blocked_ips':
+                    # The gauge value is on the next iteration or same line
+                    try:
+                        parts = line.split()
+                        if len(parts) == 2:
+                            active_ips = float(parts[1])
+                    except (ValueError, IndexError):
+                        pass
                 elif line.startswith('ddos_active_blocked_ips '):
-                    logger.info(f"Found active_ips line: {line}")
-                    found_ips = True
                     try:
-                        value_str = line.rsplit(' ', 1)[-1]
-                        active_ips = float(value_str)
-                        logger.info(f"  Parsed value: {active_ips}")
-                    except ValueError as e:
-                        logger.warning(f"  Failed to parse: {e}")
-            
-            logger.info(f"Results: found_requests={found_requests}, found_blocked={found_blocked}, found_ips={found_ips}")
-            logger.info(f"Totals: requests={total_requests}, blocked={total_blocked}, ips={active_ips}")
+                        val = line.split()[-1]
+                        active_ips = float(val)
+                    except (ValueError, IndexError):
+                        pass
         
         except Exception as e:
-            logger.error(f"Metrics parsing error: {e}", exc_info=True)
+            logger.error(f"Error querying /metrics endpoint: {e}")
             total_requests = 0
             total_blocked = 0
             active_ips = 0
@@ -246,7 +238,7 @@ async def get_metrics(request: Request) -> DashboardMetrics:
             high_risk_ips=12
         )
     except Exception as e:
-        logger.error(f"Error fetching metrics: {e}", exc_info=True)
+        logger.error(f"Error fetching metrics: {e}")
         # Fallback response
         return DashboardMetrics(
             total_requests=0,
