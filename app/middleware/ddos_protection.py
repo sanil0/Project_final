@@ -288,9 +288,9 @@ class DDoSProtectionMiddleware(BaseHTTPMiddleware):
         logger.info(f"🛡️ DDoS Middleware processing: {request.method} {request.url.path}")
         
         try:
-            # Skip middleware for /metrics and /dashboard endpoints
-            if request.url.path in ["/metrics", "/favicon.ico"] or request.url.path.startswith("/dashboard") or request.url.path.startswith("/static"):
-                logger.debug(f"Skipping DDoS check for: {request.url.path}")
+            # Skip middleware ONLY for /metrics endpoint (to avoid recursion)
+            if request.url.path == "/metrics":
+                logger.debug(f"Skipping DDoS check for metrics endpoint")
                 return await call_next(request)
             
             # Refresh services from app.state if tests injected/mutated them after initialization
