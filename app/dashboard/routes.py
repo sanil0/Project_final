@@ -231,7 +231,7 @@ async def get_metrics(request: Request) -> DashboardMetrics:
 
         block_rate = (total_blocked / total_requests * 100) if total_requests > 0 else 0
 
-        return DashboardMetrics(
+        metrics = DashboardMetrics(
             total_requests=int(total_requests),
             total_blocked=int(total_blocked),
             block_rate_percent=round(block_rate, 2),
@@ -239,10 +239,12 @@ async def get_metrics(request: Request) -> DashboardMetrics:
             active_ips=int(active_ips),
             high_risk_ips=12
         )
+        # Return with aliases using model_dump
+        return JSONResponse(content=metrics.model_dump(by_alias=True))
     except Exception as e:
         logger.error(f"Error fetching metrics: {e}")
         # Fallback response
-        return DashboardMetrics(
+        fallback = DashboardMetrics(
             total_requests=0,
             total_blocked=0,
             block_rate_percent=0.0,
@@ -250,6 +252,7 @@ async def get_metrics(request: Request) -> DashboardMetrics:
             active_ips=0,
             high_risk_ips=0
         )
+        return JSONResponse(content=fallback.model_dump(by_alias=True))
 
 
 @router.get("/api/traffic")
