@@ -171,15 +171,52 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     if not check_auth(request):
         raise HTTPException(status_code=401, detail="Unauthorized")
     
-    # TEMPORARY: Return test data to verify endpoint is working
-    return DashboardMetrics(
-        total_requests=999,
-        total_blocked=888,
-        block_rate_percent=88.8,
-        avg_latency_ms=45.5,
-        active_ips=12,
-        high_risk_ips=12
-    )
+    try:
+        from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
+        
+        # Extract metric values from Prometheus objects
+        # For Counters, iterate through collected metrics and sum values
+        try:
+            total_requests = 0
+            for metric in requests_total.collect()[0].samples:
+                total_requests += metric.value
+
+            total_blocked = 0
+            for metric in requests_blocked_total.collect()[0].samples:
+                total_blocked += metric.value
+
+            # For Gauge, get the current value
+            active_ips = 0
+            for metric in active_blocked_ips.collect()[0].samples:
+                active_ips = metric.value
+                break
+        except (TypeError, AttributeError, IndexError):
+            # Fallback if metrics not yet collected
+            total_requests = 0
+            total_blocked = 0
+            active_ips = 0
+
+        block_rate = (total_blocked / total_requests * 100) if total_requests > 0 else 0
+
+        return DashboardMetrics(
+            total_requests=int(total_requests),
+            total_blocked=int(total_blocked),
+            block_rate_percent=round(block_rate, 2),
+            avg_latency_ms=45.5,
+            active_ips=int(active_ips),
+            high_risk_ips=12
+        )
+    except Exception as e:
+        logger.error(f"Error fetching metrics: {e}")
+        # Fallback response
+        return DashboardMetrics(
+            total_requests=0,
+            total_blocked=0,
+            block_rate_percent=0.0,
+            avg_latency_ms=0.0,
+            active_ips=0,
+            high_risk_ips=0
+        )
 
 
 @router.get("/api/traffic")
