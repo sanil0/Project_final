@@ -133,7 +133,7 @@ class Dashboard {
 
         const labels = timeline.map(item => {
             const time = new Date(item.timestamp);
-            return time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            return time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
         });
 
         const allowed = timeline.map(item => item.allowed || 0);
@@ -194,7 +194,7 @@ class Dashboard {
 
         tbody.innerHTML = this.logs.map(log => `
             <tr class="border-b border-slate-700 hover:bg-slate-700/50 transition">
-                <td class="px-8 py-4 text-sm text-slate-300">${new Date(log.timestamp).toLocaleTimeString()}</td>
+                <td class="px-8 py-4 text-sm text-slate-300">${new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</td>
                 <td class="px-8 py-4 text-sm text-slate-300">
                     <span class="px-2 py-1 rounded text-xs font-bold ${this.getMethodColor(log.method)}">
                         ${log.method}

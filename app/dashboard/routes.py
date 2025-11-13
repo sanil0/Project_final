@@ -256,7 +256,8 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         avg_risk = (risk_score_sum / risk_score_count) if risk_score_count > 0 else 0
 
         # Generate timeline data (last 30 minutes in 1-minute intervals)
-        now = datetime.now()
+        from datetime import timezone
+        now = datetime.now(timezone.utc)
         traffic_timeline = []
         for i in range(30):
             ts = now - timedelta(minutes=29-i)
