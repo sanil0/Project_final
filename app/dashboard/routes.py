@@ -178,20 +178,29 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         # For Counters, iterate through metrics and sum the values
         try:
             total_requests = 0
-            for metric in requests_total.collect()[0].samples:
-                total_requests += metric.value
+            collected_requests = requests_total.collect()
+            logger.info(f"DEBUG: requests_total collected - type: {type(collected_requests)}, len: {len(collected_requests) if collected_requests else 0}")
+            if collected_requests:
+                samples = collected_requests[0].samples
+                logger.info(f"DEBUG: requests_total samples - count: {len(samples)}, samples: {samples}")
+                for metric in samples:
+                    total_requests += metric.value
+            logger.info(f"DEBUG: total_requests calculated: {total_requests}")
             
             total_blocked = 0
-            for metric in requests_blocked_total.collect()[0].samples:
-                total_blocked += metric.value
+            collected_blocked = requests_blocked_total.collect()
+            if collected_blocked:
+                for metric in collected_blocked[0].samples:
+                    total_blocked += metric.value
             
             # For Gauge, get the current value
             active_ips = 0
-            for metric in active_blocked_ips.collect()[0].samples:
-                active_ips = metric.value
-                break
-        except (TypeError, AttributeError, IndexError):
+            collected_ips = active_blocked_ips.collect()
+            if collected_ips and collected_ips[0].samples:
+                active_ips = collected_ips[0].samples[0].value
+        except (TypeError, AttributeError, IndexError) as e:
             # Fallback if metrics not yet collected
+            logger.error(f"DEBUG: Exception in metrics extraction: {type(e).__name__}: {e}")
             total_requests = 0
             total_blocked = 0
             active_ips = 0
