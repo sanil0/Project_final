@@ -60,7 +60,7 @@ class DashboardMetrics(BaseModel):
     active_ips: int = Field(..., alias="blocked_ips")
     high_risk_ips: int = Field(..., alias="high_risk_ips")
 
-    model_config = ConfigDict(populate_by_name=True)
+    model_config = ConfigDict(populate_by_name=True, by_alias=True)
 
 
 # ============================================================================
