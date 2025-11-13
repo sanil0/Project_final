@@ -173,35 +173,35 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     
     try:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
-        from prometheus_client.exposition import generate_latest
         
-        # DEBUG: Check what prometheus is actually exposing
+        # Extract metric values directly from Counter objects using .collect()
+        # This is the official prometheus_client way to get metric values
         try:
-            # Get the raw Prometheus format to understand the actual values
-            prometheus_text = generate_latest().decode('utf-8')
-            
-            # Parse out the actual counter values from the Prometheus text format
             total_requests = 0
-            total_blocked = 0
-            active_ips = 0
+            # Counter.collect() returns a list of MetricFamily objects
+            # Each MetricFamily has a .samples list with the actual values
+            for family in requests_total.collect():
+                # For a Counter, each label combination produces one sample
+                # plus one _created timestamp sample we should skip
+                for sample in family.samples:
+                    if '_created' not in sample.name and 'total' in sample.name:
+                        total_requests += sample.value
             
-            for line in prometheus_text.split('\n'):
-                if line.startswith('ddos_requests_total{') and '_created' not in line:
-                    # Extract value from: ddos_requests_total{method="GET",status="allowed"} 25.0
-                    parts = line.rsplit(' ', 1)
-                    if len(parts) == 2:
-                        total_requests += float(parts[1])
-                elif line.startswith('ddos_requests_blocked_total{') and '_created' not in line:
-                    parts = line.rsplit(' ', 1)
-                    if len(parts) == 2:
-                        total_blocked += float(parts[1])
-                elif line.startswith('ddos_active_blocked_ips '):
-                    parts = line.rsplit(' ', 1)
-                    if len(parts) == 2:
-                        active_ips = float(parts[1])
+            total_blocked = 0
+            for family in requests_blocked_total.collect():
+                for sample in family.samples:
+                    if '_created' not in sample.name and 'total' in sample.name:
+                        total_blocked += sample.value
+            
+            # For Gauge (no _created variant usually)
+            active_ips = 0
+            for family in active_blocked_ips.collect():
+                for sample in family.samples:
+                    active_ips = sample.value  # Just take the first/only value
+                    break
         
         except Exception as e:
-            logger.error(f"Error parsing Prometheus metrics: {e}")
+            logger.error(f"Metrics collection error: {e}")
             total_requests = 0
             total_blocked = 0
             active_ips = 0
