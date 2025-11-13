@@ -31,6 +31,7 @@ from app.services.metrics import (
 )
 
 logger = logging.getLogger(__name__)
+logger.info("🔧 DDoS Protection Middleware MODULE LOADED")
 
 class DDoSProtectionMiddleware(BaseHTTPMiddleware):
     def __init__(
