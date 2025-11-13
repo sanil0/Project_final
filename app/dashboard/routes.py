@@ -175,21 +175,26 @@ async def get_metrics(request: Request) -> DashboardMetrics:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
         # Extract metric values from Prometheus objects
-        # For Counters, iterate through collected metrics and sum values
+        # prometheus_client counters generate both the counter and a _created timestamp
+        # We need to skip the _created metrics and sum only the actual counter values
         try:
             total_requests = 0
             for metric in requests_total.collect()[0].samples:
-                total_requests += metric.value
+                # Skip the _created timestamp metric, only count the actual counter
+                if not metric.name.endswith('_created'):
+                    total_requests += metric.value
 
             total_blocked = 0
             for metric in requests_blocked_total.collect()[0].samples:
-                total_blocked += metric.value
+                if not metric.name.endswith('_created'):
+                    total_blocked += metric.value
 
-            # For Gauge, get the current value
+            # For Gauge, get the current value (first non-_created sample)
             active_ips = 0
             for metric in active_blocked_ips.collect()[0].samples:
-                active_ips = metric.value
-                break
+                if not metric.name.endswith('_created'):
+                    active_ips = metric.value
+                    break
         except (TypeError, AttributeError, IndexError):
             # Fallback if metrics not yet collected
             total_requests = 0
