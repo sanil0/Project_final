@@ -9,7 +9,7 @@ from functools import wraps
 from fastapi import APIRouter, Request, Form, Depends, status, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 
 logger = logging.getLogger(__name__)
 
@@ -53,12 +53,14 @@ class TrafficPoint(BaseModel):
 
 class DashboardMetrics(BaseModel):
     """Current dashboard metrics."""
-    total_requests: int
-    total_blocked: int
-    block_rate_percent: float
-    avg_latency_ms: float
-    active_ips: int
-    high_risk_ips: int
+    total_requests: int = Field(..., alias="total_requests")
+    total_blocked: int = Field(..., alias="blocked_requests")
+    block_rate_percent: float = Field(..., alias="block_rate")
+    avg_latency_ms: float = Field(..., alias="latency")
+    active_ips: int = Field(..., alias="blocked_ips")
+    high_risk_ips: int = Field(..., alias="high_risk_ips")
+
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # ============================================================================
