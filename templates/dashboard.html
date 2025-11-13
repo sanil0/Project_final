@@ -98,59 +98,26 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <!-- Traffic Chart -->
             <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Traffic (1 Hour)</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Traffic (Last 30 Minutes)</h2>
                 <canvas id="trafficChart" height="80"></canvas>
             </div>
 
             <!-- Block Rate Chart -->
             <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Block Rate Distribution</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Request Distribution</h2>
                 <canvas id="blockRateChart" height="80"></canvas>
             </div>
-        </div>
 
-        <!-- Recent Events -->
-        <div class="bg-white rounded-lg shadow p-6 mb-8">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Detection Events</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead class="bg-gray-50 border-b">
-                        <tr>
-                            <th class="px-4 py-2 text-left">Timestamp</th>
-                            <th class="px-4 py-2 text-left">Source IP</th>
-                            <th class="px-4 py-2 text-left">Risk Score</th>
-                            <th class="px-4 py-2 text-left">Detection Type</th>
-                            <th class="px-4 py-2 text-left">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="events-table">
-                        <tr>
-                            <td colspan="5" class="px-4 py-2 text-gray-500">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Risk Level Distribution -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Risk Level Distribution</h2>
+                <canvas id="riskDistChart" height="80"></canvas>
             </div>
-        </div>
 
-        <!-- Blocked IPs -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Currently Blocked IPs</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                    <thead class="bg-gray-50 border-b">
-                        <tr>
-                            <th class="px-4 py-2 text-left">IP Address</th>
-                            <th class="px-4 py-2 text-left">Reason</th>
-                            <th class="px-4 py-2 text-left">Blocked At</th>
-                            <th class="px-4 py-2 text-left">Duration (min)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="blocked-ips-table">
-                        <tr>
-                            <td colspan="4" class="px-4 py-2 text-gray-500">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Latency Trend -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Latency Trend</h2>
+                <canvas id="latencyTrendChart" height="80"></canvas>
             </div>
         </div>
     </main>
