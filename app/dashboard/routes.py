@@ -174,19 +174,23 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     try:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
-        # Extract metric values directly from prometheus_client metric objects
-        # prometheus_client Counter has ._value attribute containing the actual count
+        # Extract metric values from prometheus_client metric objects
+        # For labeled Counters, ._metrics contains all label combinations
         try:
-            # For Counter objects, use ._value.get() to extract the actual value
             total_requests = 0
-            if hasattr(requests_total, '_value'):
-                total_requests = float(requests_total._value.get())
+            if hasattr(requests_total, '_metrics'):
+                # For labeled counters, sum the _value of each label combination
+                for metric_obj in requests_total._metrics.values():
+                    if hasattr(metric_obj, '_value'):
+                        total_requests += float(metric_obj._value.get())
             
             total_blocked = 0
-            if hasattr(requests_blocked_total, '_value'):
-                total_blocked = float(requests_blocked_total._value.get())
+            if hasattr(requests_blocked_total, '_metrics'):
+                for metric_obj in requests_blocked_total._metrics.values():
+                    if hasattr(metric_obj, '_value'):
+                        total_blocked += float(metric_obj._value.get())
             
-            # For Gauge, just access ._value directly
+            # For Gauge (no labels), check _value directly
             active_ips = 0
             if hasattr(active_blocked_ips, '_value'):
                 active_ips = float(active_blocked_ips._value)
