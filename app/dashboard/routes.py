@@ -174,14 +174,24 @@ async def get_metrics(request: Request) -> DashboardMetrics:
     try:
         from app.services.metrics import requests_total, requests_blocked_total, active_blocked_ips
         
-        # Prometheus Counter and Gauge expose() methods return collected metrics
-        # We need to extract the actual values from the metric objects
+        # Extract metric values from Prometheus objects
+        # For Counters, iterate through metrics and sum the values
         try:
-            total_requests = float(requests_total._value.get()) if hasattr(requests_total, '_value') else 0
-            total_blocked = float(requests_blocked_total._value.get()) if hasattr(requests_blocked_total, '_value') else 0
-            active_ips = float(active_blocked_ips._value) if hasattr(active_blocked_ips, '_value') else 0
-        except (TypeError, AttributeError):
-            # Fallback: Prometheus objects might not have _value in all versions
+            total_requests = 0
+            for metric in requests_total.collect()[0].samples:
+                total_requests += metric.value
+            
+            total_blocked = 0
+            for metric in requests_blocked_total.collect()[0].samples:
+                total_blocked += metric.value
+            
+            # For Gauge, get the current value
+            active_ips = 0
+            for metric in active_blocked_ips.collect()[0].samples:
+                active_ips = metric.value
+                break
+        except (TypeError, AttributeError, IndexError):
+            # Fallback if metrics not yet collected
             total_requests = 0
             total_blocked = 0
             active_ips = 0
